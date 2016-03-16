@@ -10,35 +10,17 @@ class Chat(QMainWindow):
         super(Chat, self).__init__()
         self.setWindowTitle('chat')
 
-        self.talkArea = QWidget()
-
-        self.outputArea = QTextBrowser()
-        self.pushButton = QPushButton("push")
-        self.inputtext = QLineEdit()
-        self.hbox = QHBoxLayout()
-
-        self.hbox.addWidget(self.inputtext)
-        self.hbox.addWidget(self.pushButton)
-        
-        self.setLayout(QVBoxLayout())
-        self.layout().addWidget(self.outputArea)
-        self.layout().addLayout(self.hbox)
-
-        self.pushButton.clicked.connect(self.push)
-        
-        self.setCentralWidget(self.talkArea)
-
         self.createActions()
+        self.createQWidget()
 
     def about(self):
-        #QMessageBox.about("this is my work")
         self.bar.showMessage('about')
 
     def logout(self):
         pass
 
     def set_thing(self):
-        pass
+        self.bar.showMessage('set')
         
     def createActions(self):
         aboutAct = QAction("&about", self)
@@ -64,9 +46,32 @@ class Chat(QMainWindow):
         # this is ubuntu special thing, so you should input this to stop origin ubuntu menubar
         self.aboutmenu.setNativeMenuBar(False)
 
+    def createQWidget(self):
+        self.talkArea = QWidget()
+        self.setCentralWidget(self.talkArea)
+
+        #qtextbrowser and qpushbutton and qlineedit of self is self.talkArea
+        self.outputArea = QTextBrowser(self.talkArea)
+        self.pushButton = QPushButton("push", self.talkArea)
+        self.inputtext = QLineEdit(self.talkArea)
+        self.hbox = QHBoxLayout()
+
+        self.hbox.addWidget(self.inputtext)
+        self.hbox.addWidget(self.pushButton)
+
+        #because qwidget only have setlayout, so use self.talkArea to set
+        self.talkArea.setLayout(QVBoxLayout())
+        self.talkArea.layout().addWidget(self.outputArea)
+        self.talkArea.layout().addLayout(self.hbox)
+
+        self.pushButton.clicked.connect(self.push)
+
+        
+        self.talkArea.show()
+
     def push(self):
         self.outputArea.append(self.inputtext.text())
-        Chat().statusBar().showMessage(self.inputtext.text())
+        self.bar.showMessage(self.inputtext.text())
         self.inputtext.clear()
         
 
