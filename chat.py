@@ -12,9 +12,11 @@ class Chat(QMainWindow):
 
         self.createActions()
         self.createQWidget()
+        self.createAboutQWidget()
 
     def about(self):
         self.bar.showMessage('about')
+        self.aboutArea.show()
 
     def logout(self):
         self.outputArea.clear()
@@ -97,6 +99,15 @@ class Chat(QMainWindow):
         self.show()
         self.ip_input.clear()
         self.loginArea.hide()
+
+    def createAboutQWidget(self):
+        self.aboutArea = QWidget()
+        self.aboutArea.setWindowTitle('about')
+
+        self.about_label = QLabel('這是我在工程獅計劃中的作品之一', self.aboutArea)
+
+        self.aboutArea.setLayout(QVBoxLayout())
+        self.aboutArea.layout().addWidget(self.about_label)
         
 
 if __name__ == '__main__':
