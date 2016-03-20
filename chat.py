@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QAction, QApplication, QMainWindow, QMenu, QMessageBox, QWidget
                              , QTextBrowser, QPushButton, QLineEdit, QHBoxLayout
-                             ,QVBoxLayout)
+                             ,QVBoxLayout, QLabel)
 
 class Chat(QMainWindow):
     def __init__(self):
@@ -17,7 +17,9 @@ class Chat(QMainWindow):
         self.bar.showMessage('about')
 
     def logout(self):
-        pass
+        self.outputArea.clear()
+        self.loginArea.show()
+        self.hide()
 
     def set_thing(self):
         self.bar.showMessage('set')
@@ -48,7 +50,7 @@ class Chat(QMainWindow):
 
     def createQWidget(self):
         self.talkArea = QWidget()
-        self.setCentralWidget(self.talkArea)
+        self.setCentralWidget(self.talkArea)   #let QWidget in QMainWindwos
 
         #qtextbrowser and qpushbutton and qlineedit of self is self.talkArea
         self.outputArea = QTextBrowser(self.talkArea)
@@ -73,11 +75,33 @@ class Chat(QMainWindow):
         self.outputArea.append(self.inputtext.text())
         self.bar.showMessage(self.inputtext.text())
         self.inputtext.clear()
+
+    def loginQWidget(self):
+        self.loginArea = QWidget()
+        self.loginArea.setWindowTitle('login')
+
+        self.label = QLabel('輸入ip:', self.loginArea)
+        self.ip_input = QLineEdit(self.loginArea)
+        self.login_button = QPushButton('login', self.loginArea)
+
+        self.loginArea.setLayout(QVBoxLayout())
+        self.loginArea.layout().addWidget(self.label)
+        self.loginArea.layout().addWidget(self.ip_input)
+        self.loginArea.layout().addWidget(self.login_button)
+
+        self.login_button.clicked.connect(self.login)
+
+        self.loginArea.show()
+
+    def login(self):
+        self.show()
+        self.ip_input.clear()
+        self.loginArea.hide()
         
 
 if __name__ == '__main__':
 
     app = QApplication(sys.argv)
     chat1 = Chat()
-    chat1.show()
+    chat1.loginQWidget()
     sys.exit(app.exec_())
